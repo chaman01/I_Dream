@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+    <title>Reset Password</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" type="text/css">
+    <script type="text/javascript" >
+    updatePassword=()=>{
+            if($("#password").val().trim().toString().length<6){
+                        swal({
+                        title: "Password can have min 6 characters",
+                        text: "clicked the button!",
+                        icon: "info",
+                        });
+                        return false;
+                    }
+                    else if($("#password").val().trim().toString().length>16){
+                            swal({
+                            title: "Password can have max 16 characters",
+                            text: "clicked the button!",
+                            icon: "info",
+                            });
+                            return false;
+                    }
+
+                    else if($("#password").val().trim().toString()!=$("#confpassword").val().trim().toString())
+                    {
+                        swal({
+                        title: "Password and confirm password should same",
+                        text: "clicked the button!",
+                        icon: "info",
+                        });
+                        return false;
+                    }
+                else{
+                let url_string=document.URL;
+                let url = new URL(url_string);
+                let token = url.searchParams.get("token");
+                let datatoSend={
+                    token:token,
+                    password:$("#password").val().trim().toString()
+                }
+
+
+                $.post("{{{url}}}",datatoSend,function(response,data){
+                    if(response.statusCode==200){
+                        swal({
+                                title:"Password updated successfully",
+                                text: "clicked the button!",
+                                icon: "success",
+                            });
+                    }else{
+                        swal({
+                                title: "Something is missing",
+                                text: "clicked the button!",
+                                icon: "warning",
+                            });
+                    }
+                })
+            }
+           
+            
+               
+            
+        }
+
+        $(function(e){
+                $("#btnVerify").click(function(event) {
+                    updatePassword();
+                });
+           
+        });
+
+       
+
+
+        
+    </script>
+
+
+
+<script type="text/javascript">
+
+
+    $(document).keypress(function(e) {
+     let keycode = (e.keyCode ? e.keyCode : e.which);
+     if (keycode == '13') {
+        updatePassword();
+     }
+ });
+     
+ </script>
+
+   
+   <style>
+        body {
+            overflow: hidden;
+            font-family: 'Helvetica', sans-serif;
+            opacity: 1;
+        }
+        
+        .main-section {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            /* background-color:#6495ED; */
+            background-size: cover;
+            background-position: center center;
+            padding: 10px;
+        }
+        
+        .confirm-wrapper {
+            width: 100%;
+            max-width: 450px;
+            margin: 30px auto;
+             background: transparent;
+            padding: 30px; 
+            box-shadow: 0px 1px 13px #302B47;
+            border-radius: 4px;
+        }
+        
+        .logo {
+            width: 100%;
+            height: auto;
+            text-align: center;
+        }
+        
+        .outer {
+            width: 110px;
+            height: 110px;
+            background: #302B47;
+            margin:auto;
+            border-radius: 55%;
+            padding: 10px 0px;
+            text-align: CENTER;
+        }
+        
+        .btn-login {
+            width: 100%;
+            max-width: 200px;
+            padding: 10px;
+            color: #fff;
+            font-size: 16px;
+            background: #302B47;
+            border-radius: 40px;
+            margin-top: 10px;
+        }
+        
+        .btn-login:hover,
+        .btn-login:focus,
+        .btn-login:active {
+            color: #eee;
+            background: #302B47;
+        }
+        
+        hr {
+            border-color: #302B47;
+        }
+        
+        .content-sect h2 {
+            font-size: 22px;
+            color: white;
+            font-weight: 300;
+        }
+        
+        .content-sect h3 {
+            font-weight: 500;
+            color: rgb(119, 119, 119);
+        }
+        
+        input.custom-input {
+            width: 100%;
+            height: 40px;
+            border: 1px solid #f5f5f5;
+            box-shadow: none !important;
+            outline: none !important;
+            background: #F5F5F5;
+            border-radius: 2px;
+            color: #302B47;
+        }
+        
+        input.custom-button {
+            width: 100%;
+            margin-top: 25px;
+            height: 50px;
+            border: none;
+            color: #fff;
+            box-shadow: none;
+            background: #302B47;
+            font-weight: 700;
+            border-radius: 2px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1;
+        }
+        
+        p.copy
+        {
+            font-size: 12px;
+            margin-top: 20px;
+            color: white;
+        }
+        
+        input.custom-input:hover, 
+        input.custom-input:focus, 
+        input.custom-input:active 
+        {
+            border: 1px solid #6495ED;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <div class="main-section">
+        <div class="confirm-wrapper animated fadeInUp">
+            <div class="logo text-center">
+                <div class="outer animated rotateIn">
+                   
+                </div>
+            </div>
+            <div class="content-sect">
+                <h2 class="text-center">Reset Your Password!</h2>
+                <hr>
+            </div>
+            <div class="content-sect">
+                <form>
+                    <div class="form-group">
+                        <input name="password" id="password" class="form-control custom-input"  type="password" placeholder="Enter new password" >
+                    </div>
+                    <div class="form-group">
+                            <input name="password" class="form-control custom-input" id="confpassword" type="password" placeholder="Enter confirm Password" >
+                    </div>
+                    <div class="form-group">
+                        <input type="button" class="form-control custom-button" value="Reset" id="btnVerify">
+                    </div>
+                </form>
+                
+                
+            <p class="copy text-center">
+                &copy; Copyright 2018. COMVO DEBATE . All Right Reserved.
+            </p>
+            </div>
+        </div>
+
+
+    </div>
+</body>
+
+</html>
