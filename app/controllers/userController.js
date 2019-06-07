@@ -17,75 +17,59 @@ const Services                          = require('../services'),
 
 
 class userController {
-    static async sendOtp(payloadData){
-        try{
-            let otp = Math.floor(Math.random()*10000);
-            payloadData.otp=otp;
-            payloadData.expireIn=((+new Date())+(2*60*1000))
-            // await SmsManager.sendVerificationCode();
-            
-            await emailManager.unifonicIntegration(payloadData.fullNumber, otp)
 
-            let dataToSend=await Services.DbOperations.saveData(Models.SmsOtp,payloadData);
-            console.log(dataToSend,'dataToSenddataToSenddataToSenddataToSenddataToSenddataToSend')
-            return {"_id":dataToSend._id};
-        }catch(err){
-            console.log(err)
-            return Promise.reject(Config.APP_CONSTANTS.STATUS_MSG.ERROR.SOMETHING_WENT_WRONG);
-         }
-    }
+    static async UserLogin(payloadData) {
+        try {
+            let criteria = {
+                email: payloadData.email
+            };
+            let projection = {
+                email: 1,
+                password: 1
+            };
+            let option = {
+                lean: true
+            };
 
+            let userData = await Services.DbOperations.getData(Models.Users, criteria, projection, option);
+            if (!userData || !userData.length) {
+                return Promise.reject(Config.APP_CONSTANTS.STATUS_MSG.ERROR.INVALID_EMAIL);
+            }
+            let isMatched = await UniversalFunctions.compareHashPassword(payloadData.password, userData[0].password)
+            if (!isMatched) {
+                await Services.DbOperations.findAndUpdate(Models.Users, { _id: userData[0]._id }, { $push: { loginAttempts: { validAttempt: false, ipAddress: payloadData.ipAddress } } }, { new: true });
+                return Promise.reject(Config.APP_CONSTANTS.STATUS_MSG.ERROR.INVALID_PASSWORD);
+            }
 
+            let tz = Math.floor((Math.random() * 10000) + 10000);
+            let tokenData = {
+                id: userData[0]._id,
+                random: tz,
+                type: Config.APP_CONSTANTS.DATABASE.USER_ROLES.USER
+            };
 
-    static async verifyOtp(payloadData){
-        try{
-             let findOtpDetail=await Services.DbOperations.findOne(Models.SmsOtp,{fullNumber:payloadData.fullNumber,otp:payloadData.otp,_id:payloadData.otpId});
-             console.log(findOtpDetail,'findOtpDetailfindOtpDetailfindOtpDetailfindOtpDetail')
-             if(!findOtpDetail) return Promise.reject(Config.APP_CONSTANTS.STATUS_MSG.ERROR.INVALID_OTP_ID);
-
-             if(findOtpDetail.expireIn<(+new Date())) return Promise.reject(Config.APP_CONSTANTS.STATUS_MSG.ERROR.OTP_EXPIRED);
-
-             let userData=await Services.DbOperations.findOne(Models.Users,{"fullNumber":findOtpDetail.fullNumber},{},{lean:true});
-             if(userData===null){
-                 let dataToSave={
-                     fullNumber:payloadData.fullNumber,
-                     callingCode:payloadData.callingCode,
-                     deviceType:payloadData.deviceType,
-                     deviceToken:payloadData.deviceToken,
-                     userType:payloadData.userType
-                 }
-                 let saveData=await Services.DbOperations.saveData(Models.Users,dataToSave);
-                 let tokenData = {
-                     id: saveData._id,
-                     random: Math.floor((Math.random() * 10000) + 10000),
-                     type: Config.APP_CONSTANTS.DATABASE.USER_ROLES.USER
-                 };
-                 let token = await TokenManager.setToken(tokenData, Config.APP_CONSTANTS.DATABASE.TOKEN_FIELDS.ACCESS_TOKEN);
-                 saveData.accessToken=token.accessToken;
-                 saveData.isExists=false;
-                 delete saveData.__v;
-                 return saveData;
-
-             }else{
-                 if(userData.isBlocked)
-                 return Promise.reject(Config.APP_CONSTANTS.STATUS_MSG.ERROR.BLOCKED_BY_ADMIN);
-                 let tokenData = {
-                     id: userData._id,
-                     random: Math.floor((Math.random() * 10000) + 10000),
-                     type: Config.APP_CONSTANTS.DATABASE.USER_ROLES.USER
-                 };
-                 let token = await TokenManager.setToken(tokenData, Config.APP_CONSTANTS.DATABASE.TOKEN_FIELDS.ACCESS_TOKEN);
-                 userData.accessToken=token.accessToken;
-                 userData.isExists=true;
-                 delete userData.__v;
-                 return userData;
-             }
-
-        }catch(err){
-            console.log(err);
+            let token = await TokenManager.setToken(tokenData, Config.APP_CONSTANTS.DATABASE.TOKEN_FIELDS.ACCESS_TOKEN)
+            delete userData[0].password;
+            delete userData[0].__v;
+            await Services.DbOperations.findAndUpdate(Models.Users, { _id: userData[0]._id }, { $push: { loginAttempts: { validAttempt: true, ipAddress: payloadData.ipAddress } }, Random: tz, isActive: true }, { new: true });
+            userData[0].accessToken = token.accessToken;
+            return userData[0]
+        } catch (err) {
+            console.log('===============  Error ============== ', err);
             return Promise.reject(Config.APP_CONSTANTS.STATUS_MSG.ERROR.SOMETHING_WENT_WRONG);
         }
     }
+
+    static async createPost(){
+        try{
+
+        }catch(err){
+            console.log("errrrrrrrrrrrrr ", err)
+            return Promise.reject(Config.APP_CONSTANTS.STATUS_MSG.ERROR.SOMETHING_WENT_WRONG);
+        }
+    }
+
+
 
     static async addPersonalInfo(payloadData,userData){
          try{

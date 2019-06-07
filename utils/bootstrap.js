@@ -11,9 +11,7 @@ const mongoose                      =              require('mongoose'),
 
 exports.bootstrapAdmin = async()=> {
     try{
-
         console.log("inside boot strap")
-
         let adminData1 = {
             email: 'test@gmail.com',
             superAdmin: true,
@@ -27,7 +25,6 @@ exports.bootstrapAdmin = async()=> {
             userName: 'admin'
         };
 
-      
         await Promise.all([
             insertData(adminData1.email, adminData1),
             insertData(adminData2.email, adminData2),

@@ -79,6 +79,13 @@ let PUSH_TYPE={
     SUBSCRIBE:2
 }
 
+let STATUS={
+    PENDING:1,
+    ACCEPTED:2,
+    CANCELLED :3,
+    REJECTED:4
+}
+
 let LANGUAGE_TYPE={
     ENGLISH:1,
     ARABIC:2
@@ -122,6 +129,10 @@ let VERIFICATION_INFO_STEP={
     THREE:3
 }
 
+const POST_TYPE={
+    IMAGE:1,
+    VIDEO:2
+};
 let STATUS_MSG = {
     ERROR: {
 
@@ -135,6 +146,11 @@ let STATUS_MSG = {
             statusCode:401,
             customMessage : 'Your session has been expired.',
             type : 'INVALID_TOKEN'
+        },
+        INVALID_PASSWORD:{
+            statusCode:400,
+            customMessage : 'Password you have enter does not match',
+            type : 'INVALID_PASSWORD'
         },
 
         INVALID_OTP_ID:{
@@ -356,7 +372,7 @@ let NOTIFICATION_TYPE = {
 
 let notificationMessages = {
     registrationEmail:{
-        emailSubject:'welcome to abjad',
+        emailSubject:'welcome to socil module',
         emailMessage:''
     },
     donationRequest:{
@@ -397,7 +413,9 @@ var APP_CONSTANTS = {
     DATABASE:DATABASE,
     STATUS_MSG: STATUS_MSG,
     swaggerDefaultResponseMessages: swaggerDefaultResponseMessages,
-    NOTIFICATION_TYPE: NOTIFICATION_TYPE
+    NOTIFICATION_TYPE: NOTIFICATION_TYPE,
+    POST_TYPE:POST_TYPE,
+    STATUS:STATUS
 };
 
 module.exports = APP_CONSTANTS;

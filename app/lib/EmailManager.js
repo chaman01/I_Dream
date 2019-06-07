@@ -43,32 +43,12 @@ const sendEmail = async (email, subject, content, attachmentPath = null) => {
 
 
 
-exports.sendOtp = function () {
-    return new Promise((resolve, reject) => {
-        let client = new twilio(appSid);
-        client.messages.create({
-            to: 9991880162,
-            from: '966568249339',
-            body: "Hi from unifonic and your otp is " + 1234
-        }, function (error, message) {
-            if (!error) {
-                console.log("message  message message message ", error, message)
-                resolve(message)
-            } else {
-                console.log('Not a valid phone number');
-                reject(error)
-            }
-        });
-    })
-};
-
-
 
 
 
 async function unifonicIntegration(fullNumber, otp) {
     return new Promise((resolve, reject) => {
-        let msg = "Thank you for signing up with abjad your otp is: "+otp
+        let msg = "Thank you for signing up with -- your otp is: "+otp
 
         request({
             method: 'POST',
