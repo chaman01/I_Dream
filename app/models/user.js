@@ -10,6 +10,7 @@ let user = Schema({
     latitude:{type:Number},
     longitude:{type:Number},
     email:{type:String},
+    password :{type:String},
     isBlocked:{type:Boolean,default:false},
     isDeleted:{type:Boolean,default:false},
     deviceToken:{type:String,default:""},
