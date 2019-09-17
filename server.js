@@ -12,7 +12,7 @@ const Hapi             =      require('hapi'),
                               require('dotenv').config();
 let server=new Hapi.Server({port:process.env.PORT,host:process.env.HOST,routes:{cors:true}});
 (async ()=>{
-  console.log('social module test')
+  console.log('test')
   mongoose.connect(process.env.DB_URL,{useNewUrlParser:true,useCreateIndex:true});
   mongoose.connection.on('error',function(err){
     console.log("mongo db connection terminate "+ err);

@@ -13,15 +13,15 @@ exports.bootstrapAdmin = async()=> {
     try{
         console.log("inside boot strap")
         let adminData1 = {
-            email: 'test@gmail.com',
+            email: 'test@idream.com',
             superAdmin: true,
-            password: 'test',
+            password: 'idream',
             userName: 'test'
         };
         let adminData2 = {
-            email: 'admin@gmail.com',
+            email: 'admin@idream.com',
             superAdmin: true,
-            password: 'admin',
+            password: 'idream',
             userName: 'admin'
         };
 

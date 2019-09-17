@@ -3,7 +3,7 @@ const Inert             =       require('inert'),
       HapiSwagger       =       require('hapi-swagger'),
       authToken         =       require('./auth-token'),
       Pack              =       require('../package'),
-      swaggerOptions    =       {info: { title: 'social module', version: Pack.version}};
+      swaggerOptions    =       {info: { title: 'I Dream Test', version: Pack.version}};
 
 module.exports = [
    Inert,
