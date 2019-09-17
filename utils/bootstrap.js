@@ -35,6 +35,9 @@ exports.bootstrapAdmin = async()=> {
 
 };
 
+
+
+
 async function  insertData (email, adminData){
     try{
         let criteria = {
