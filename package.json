@@ -24,7 +24,7 @@
     "gm": "^1.23.1",
     "good": "^8.1.2",
     "good-winston": "^4.0.0",
-    "handlebars": "^4.1.0",
+    "handlebars": "^4.7.7",
     "hapi": "^17.8.1",
     "hapi-auth-jwt2": "^8.2.0",
     "hapi-swagger": "^9.2.0",
